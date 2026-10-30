@@ -10,7 +10,11 @@ aiomysql>=0.2.0
 pydantic>=2.0.0
 
 # 密码加密（bcrypt）
+# passlib是一个密码哈希的“框架”，它支持很多算法后端：bcrypt、argon2、scrypt、pbkdf2...但不是每一个都需要
+# 如果只写 pip install passlib,装完后调用pwd_context.hash()就会报MissingBackendError(找不到bcrypt实现)
+# 如果写pip install "passlib[bcrypt]",pip会去读passlib包元数据里的extras_require,自动把bcrypt一起装上
 passlib[bcrypt]>=1.7.4
+bcrypt==4.0.1
 
 # Redis 异步客户端
 redis>=5.0.0

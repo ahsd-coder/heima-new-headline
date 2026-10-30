@@ -17,6 +17,7 @@ router = APIRouter(prefix="/api/user", tags=["users"])
 # 用户注册
 @router.post("/register")
 async def register(user_data: UserRequest, db: AsyncSession = Depends(get_db)):
+    # 注册逻辑：验证用户是否存在 -> 创建用户 -> 生成Token -> 响应结果
     # 根据用户名查询数据库
     db_user = await users.get_user_by_username(db, user_data.username)
     if db_user:

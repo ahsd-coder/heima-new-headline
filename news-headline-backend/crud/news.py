@@ -5,7 +5,8 @@ from sqlalchemy.sql.expression import select
 from cache.news_cache import (set_cache_categories, get_cached_categories,
                               get_cache_news_list, set_cache_news_list,
                               get_cached_news_detail, cache_news_detail,
-                              get_cached_related_news, cache_related_news)
+                              get_cached_related_news, cache_related_news,
+                              delete_news_detail_cache)
 from models.news import Category, News
 from schemas.base import NewsItemBase
 
@@ -103,6 +104,9 @@ async def increase_new_views(db: AsyncSession, news_id: int):
     result = await db.execute(stmt)
     await db.commit()
 
+    # 删除缓存，让下次请求重新从数据库读取最新数据
+    await delete_news_detail_cache(news_id)
+
     # 更新 → 检查数据库是否真的命中了数据 → 命中了返回True
     return result.rowcount > 0
 
@@ -130,6 +134,7 @@ async def get_related_news(db: AsyncSession, news_id: int, category_id: int, lim
     result = await db.execute(stmt)
     related_news = result.scalars().all()
 
+    # 列表推导式 推导出新闻的核心数据
     related_list = [
         {
             "id": item.id,

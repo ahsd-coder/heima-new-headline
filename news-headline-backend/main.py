@@ -30,7 +30,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=[origins],      # 生成环境
-    allow_origins=["*"],      # 允许访问的源
+    allow_origins=["*"],      # 允许访问的源,开发阶段允许所有源，生产环境需要指定源
     allow_credentials=True,   # 允许携带 Cookie
     allow_methods=["*"],      # 允许所有请求方法
     allow_headers=["*"],      # 允许所有请求头

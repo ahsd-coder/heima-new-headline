@@ -51,3 +51,13 @@ async def set_cache(key: str, value: Any, expire: int = 3600):
     except Exception as e:
         print(f"设置缓存失败：{e}")
         return False
+
+
+# 删除缓存
+async def delete_cache(key: str):
+    try:
+        await redis_client.delete(key)
+        return True
+    except Exception as e:
+        print(f"删除缓存失败：{e}")
+        return False
